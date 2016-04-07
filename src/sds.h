@@ -37,10 +37,14 @@
 #include <stdarg.h>
 
 typedef char *sds;
-
+/*简单动态字符串 */
 struct sdshdr {
+    /*记录buf数组中已使用字节的数量*/
+    /*等于SDS所保存字符串的长度*/
     unsigned int len;
+    /*记录buf数组中未使用字节的数量*/
     unsigned int free;
+    /*字节数组 用于保存字符串内容*/
     char buf[];
 };
 
