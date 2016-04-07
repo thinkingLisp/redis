@@ -37,7 +37,25 @@
 #include <stdarg.h>
 
 typedef char *sds;
-/*简单动态字符串 */
+/*简单动态字符串 
+  示例: 比如  "redis"
+  len 5  表示SDS保存一个5字节的字符串
+  free 0 表示SDS没有分配未使用的字节
+  buff  'r' 'e' 'd' 'i' 's' '\0'
+  char类型的数组,保存了redis 5个字符串 最后一个为空字节 \0
+  SDS遵循C语言规范,保存的一个字节不计算在len属性里面,并且为空字节分配一个内存空间
+   示例: 可以使用标准c stdio.h 中的printf函数
+   prinf("%s",s->buf);
+   out:  redis
+   示例:
+   如果free为5,将分配5个未使用的字节数
+  示例:如果c语言字符串为redis,5个字符,加上'/0'结束.
+  SDS相比string的好处:
+  1.SDS查询长度o(1) string每次需要查询为o(n)
+  2.避免缓冲区溢出
+  3.使用SDS可以避免c语言不能存空,或者使用空来切割字符串
+    SDS通过len判断是否结束,而不是通过末尾为'/0'结束
+*/
 struct sdshdr {
     /*记录buf数组中已使用字节的数量*/
     /*等于SDS所保存字符串的长度*/

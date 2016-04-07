@@ -236,6 +236,10 @@ sds sdsgrowzero(sds s, size_t len) {
  *
  * After the call, the passed sds string is no longer valid and all the
  * references must be substituted with the new pointer returned by the call. */
+ /*
+   SDS cat 连接字符串,可以避免缓冲区溢出
+       检验SDS空间大小是否足够,如果不够,扩展SDS空间,然互拼接字符串
+  */
 sds sdscatlen(sds s, const void *t, size_t len) {
     struct sdshdr *sh;
     size_t curlen = sdslen(s);
