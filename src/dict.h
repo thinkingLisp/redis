@@ -43,15 +43,18 @@
 
 /* Unused arguments generate annoying warnings... */
 #define DICT_NOTUSED(V) ((void) V)
-
+/*哈希表节点*/
 typedef struct dictEntry {
+    //键
     void *key;
+    //值
     union {
         void *val;
         uint64_t u64;
         int64_t s64;
         double d;
     } v;
+    //指向下一个哈希表节点,形成链表
     struct dictEntry *next;
 } dictEntry;
 
@@ -66,17 +69,28 @@ typedef struct dictType {
 
 /* This is our hash table structure. Every dictionary has two of this as we
  * implement incremental rehashing, for the old to the new table. */
+ /*哈希表*/
 typedef struct dictht {
+    //哈希表数组
     dictEntry **table;
+    //哈希表大小
     unsigned long size;
+    // 哈希表大小掩码,用于计算索引值
+    //总是等于size-1
     unsigned long sizemask;
+    //该哈希表已有节点数量
     unsigned long used;
 } dictht;
-
+/*字典*/
 typedef struct dict {
+    //类型特定函数
     dictType *type;
+    //私有数据
     void *privdata;
+    //哈希表
     dictht ht[2];
+    //rehash索引
+    //当rehash不在进行时,值为-1
     long rehashidx; /* rehashing not in progress if rehashidx == -1 */
     int iterators; /* number of iterators currently running */
 } dict;
